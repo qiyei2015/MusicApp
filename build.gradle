@@ -7,6 +7,20 @@ buildscript {
         google()
         jcenter()
         mavenCentral()
+
+        // add self maven
+        maven {
+            if (isSnapshots){
+                url MAVEN_SNAPSHOTS_REPOSITORY_URL
+            } else {
+                url MAVEN_RELEASE_REPOSITORY_URL
+            }
+
+            credentials {
+                username MAVEN_USERNAME
+                password MAVEN_PASSWORD
+            }
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.1'
@@ -23,6 +37,20 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
+
+        // add self maven
+        maven {
+            if (isSnapshots){
+                url MAVEN_SNAPSHOTS_REPOSITORY_URL
+            } else {
+                url MAVEN_RELEASE_REPOSITORY_URL
+            }
+
+            credentials {
+                username MAVEN_USERNAME
+                password MAVEN_PASSWORD
+            }
+        }
     }
 }
 
