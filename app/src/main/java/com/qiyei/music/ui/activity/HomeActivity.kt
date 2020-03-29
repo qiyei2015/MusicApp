@@ -3,7 +3,6 @@ package com.qiyei.music.ui.activity
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -13,7 +12,6 @@ import com.qiyei.music.ui.fragment.FindFragment
 import com.qiyei.music.ui.fragment.FriendFragment
 import com.qiyei.music.ui.fragment.MyFragment
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlin.math.log
 
 /**
  * @author Created by qiyei2015 on 2020/3/27.
@@ -36,7 +34,6 @@ class HomeActivity : BaseActivity() {
     override protected fun initView():Unit{
 
         slide_toggle_imv.setOnClickListener {
-            Log.i("HomeActivity","start=" + draw_layout.isDrawerOpen(GravityCompat.START))
             if (!draw_layout.isDrawerOpen(GravityCompat.START)){
                 draw_layout.openDrawer(GravityCompat.START)
             } else {

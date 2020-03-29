@@ -66,21 +66,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--侧边菜单栏区 必须指定android:layout_gravity属性-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/colorPrimaryDark"
-        android:id="@+id/slide_menu_constraintLayout">
+    <include layout="@layout/menu_home_slide_left"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="侧边菜单栏区"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </TextView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
