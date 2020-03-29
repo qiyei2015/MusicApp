@@ -13,16 +13,55 @@
         android:layout_height="match_parent"
         android:id="@+id/content_constraintLayout">
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="内容区"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/toolbar_layout"
+            android:layout_margin="@dimen/dimen_10"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="54dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        </TextView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/dimen_10"
+                android:id="@+id/slide_toggle_imv"
+                android:src="@mipmap/icon_category"
+                android:scaleType="center">
+            </ImageView>
 
+            <com.google.android.material.tabs.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/slide_toggle_imv"
+                android:layout_centerVertical="true"
+                android:id="@+id/home_tab_layout">
+            </com.google.android.material.tabs.TabLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dimen_10"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/search_imv"
+                android:src="@mipmap/icon_search"
+                android:scaleType="center">
+            </ImageView>
+
+        </RelativeLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/home_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_layout">
+        </androidx.viewpager.widget.ViewPager>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -31,6 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/colorPrimaryDark"
         android:id="@+id/slide_menu_constraintLayout">
 
         <TextView
