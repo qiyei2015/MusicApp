@@ -27,6 +27,43 @@
                 android:src="@mipmap/icon_avatar_logout">
             </ImageView>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/login_help"
+                android:textColor="@color/color_333333"
+                android:id="@+id/login_tv">
+            </TextView>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_20"
+                android:id="@+id/login_btn"
+                android:text="@string/login_now"
+                android:textAllCaps="false"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/selector_login_btn_background">
+            </Button>
+
+            <!--后续再开发-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lll_layout"
+                android:orientation="horizontal">
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:id="@+id/login_layout_div"
+                android:background="#dddddd"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+            </View>
+
         </LinearLayout>
 
     </ScrollView>

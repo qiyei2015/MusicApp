@@ -6,4 +6,6 @@
     <string name="night_mode">夜间模式</string>
     <string name="exit">退出</string>
     <string name="setting">设置</string>
+    <string name="login_help">登陆网易云音乐</string>
+    <string name="login_now">立即登录</string>
 </resources>
