@@ -1,12 +1,17 @@
 package com.qiyei.music.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.fragment.app.Fragment
 import com.qiyei.music.R
+import com.qiyei.network.api.HttpManager
+import com.qiyei.network.api.HttpRequest
+import com.qiyei.network.api.IHttpTransferListener
+import com.qiyei.network.server.retrofit.IRetrofitService
+import okhttp3.ResponseBody
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,16 +44,30 @@ class MyFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_my, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        HttpManager().execute(childFragmentManager, buildDownloadRequest(),
+            object : IHttpTransferListener<String?> {
+                override fun onProgress(currentLength: Long, totalLength: Long ) {
+                    val progress = (currentLength * 1.0 / totalLength * 100).toInt()
+//                    mDownloadProgressBar.setProgress(progress)
+//                    mDownloadProgressTv.setText("$progress%")
+                    Log.i(TAG, "progress:$progress currentLength :$currentLength totalLength:$totalLength")
+                }
+
+                override fun onSuccess(response: String?) {
+                    Log.i(TAG, "response:$response")
+                }
+
+                override fun onFailure(exception: Exception?) {}
+            })
+    }
+
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+        val TAG = "MyFragment";
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             MyFragment().apply {
@@ -57,5 +76,22 @@ class MyFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    /**
+     * 下载请求
+     * @return
+     */
+    private fun buildDownloadRequest(): HttpRequest<Any> {
+        val url1 = "https://timgsa.baidu.com/"
+        val url2 = "timg?image&quality=80&size=b9999_10000&sec=1585679717920&di=dfbdbfeccf57617cc1dc07381e2d95ca&imgtype=0&src=http%3A%2F%2F00.minipic.eastday.com%2F20170122%2F20170122145324_c074bd4d20c537b795f6cc97f90d9e50_2.jpeg"
+        return HttpRequest.Builder<String>()
+            .download()
+            .setBaseUrl(url1)
+            .setPathUrl(url2)
+            .setFilePath(context?.cacheDir?.absolutePath)
+            .setBody(null)
+            .setApiClazz(IRetrofitService::class.java)
+            .build()
     }
 }

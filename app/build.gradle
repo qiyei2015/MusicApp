@@ -40,5 +40,5 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
 
     implementation project(':lib_common_ui')
-
+    implementation project(':lib_network_manager')
 }
