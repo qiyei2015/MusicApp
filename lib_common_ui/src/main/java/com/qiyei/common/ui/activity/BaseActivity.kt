@@ -1,7 +1,8 @@
 package com.qiyei.common.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.qiyei.common.ui.utils.StatusBarUtils
 
 /**
  * @author Created by qiyei2015 on 2020/3/27.
@@ -13,6 +14,7 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        StatusBarUtils.statusBarLightMode(this)
     }
 
     open protected fun initView():Unit{

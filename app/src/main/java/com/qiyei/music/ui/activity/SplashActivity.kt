@@ -1,8 +1,8 @@
 package com.qiyei.music.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.qiyei.common.ui.activity.BaseActivity
 import com.qiyei.music.R
 import java.util.*
 
@@ -13,7 +13,7 @@ import java.util.*
  * @email: 1273482124@qq.com
  * @description: 启动闪屏页
  */
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
