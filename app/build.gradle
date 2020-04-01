@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.android.compileSdkVersion
@@ -33,12 +34,17 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "com.google.android.material:material:$material_version"
-
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+
+    implementation project(':lib_common_ui')
+    implementation project(':lib_network_manager')
+    implementation project(':lib_image_manager')
+
+
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
 
-    implementation project(':lib_common_ui')
-    implementation project(':lib_network_manager')
 }

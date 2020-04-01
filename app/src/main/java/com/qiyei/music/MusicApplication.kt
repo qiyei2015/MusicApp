@@ -10,11 +10,13 @@ import android.app.Application
  */
 class MusicApplication:Application() {
 
+    companion object {
+        lateinit var instance:MusicApplication
+    }
 
     override fun onCreate() {
         super.onCreate()
-
-
+        instance = this;
     }
 
 }
