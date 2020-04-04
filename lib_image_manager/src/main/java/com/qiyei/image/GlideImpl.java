@@ -21,6 +21,7 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -55,7 +56,7 @@ public class GlideImpl implements IImageOperator {
 
     @Override
     public void load(ImageView imageView, String url) {
-        GlideApp.with(imageView.getContext())
+        Glide.with(imageView.getContext())
                 .load(url)
                 .apply(mDefault)
                 .transition(DrawableTransitionOptions.withCrossFade())
@@ -64,7 +65,7 @@ public class GlideImpl implements IImageOperator {
 
     @Override
     public void load(ImageView imageView, String url, int placeResId, int errResId) {
-        GlideApp.with(imageView.getContext())
+        Glide.with(imageView.getContext())
                 .load(url)
                 .apply(mDefault)
                 .transition(DrawableTransitionOptions.withCrossFade())
@@ -75,7 +76,7 @@ public class GlideImpl implements IImageOperator {
 
     @Override
     public void load(ImageView imageView, File file) {
-        GlideApp.with(imageView.getContext())
+        Glide.with(imageView.getContext())
                 .load(file)
                 .apply(mDefault)
                 .transition(DrawableTransitionOptions.withCrossFade())
@@ -84,7 +85,7 @@ public class GlideImpl implements IImageOperator {
 
     @Override
     public void load(ImageView imageView, int resId) {
-        GlideApp.with(imageView.getContext())
+        Glide.with(imageView.getContext())
                 .load(resId)
                 .apply(mDefault)
                 .transition(DrawableTransitionOptions.withCrossFade())
@@ -93,7 +94,7 @@ public class GlideImpl implements IImageOperator {
 
     @Override
     public void loadForCircle(final ImageView imageView, String url) {
-        GlideApp.with(imageView.getContext())
+        Glide.with(imageView.getContext())
                 .asBitmap()
                 .load(url)
                 .apply(mDefault)
@@ -110,7 +111,7 @@ public class GlideImpl implements IImageOperator {
 
     @Override
     public void loadForViewGroup(final ViewGroup group, String url) {
-        GlideApp.with(group.getContext())
+        Glide.with(group.getContext())
                 .asBitmap()
                 .load(url)
                 .apply(mDefault).into(new SimpleTarget<Bitmap>() {
@@ -158,7 +159,7 @@ public class GlideImpl implements IImageOperator {
 //     */
 //    private void displayImageForTarget(Context context, Target target, String url,
 //                                       CustomRequestListener requestListener) {
-//        GlideApp.with(context)
+//        Glide.with(context)
 //                .asBitmap()
 //                .load(url)
 //                .apply(initCommonRequestOption())

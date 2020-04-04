@@ -17,11 +17,32 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
+    /**
+     * 签名配置
+     */
+    signingConfigs {
+        //正式版签名
+        release {
+            keyAlias proj_keyAlias
+            keyPassword proj_keyPassword
+            storeFile file(project.getRootDir().getAbsolutePath() + proj_storeFile)
+            storePassword proj_storePassword
+        }
+
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
 }
@@ -35,8 +56,6 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "com.google.android.material:material:$material_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-
-    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation project(':lib_common_ui')
     implementation project(':lib_network_manager')
