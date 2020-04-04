@@ -1,6 +1,7 @@
 package com.qiyei.common.ui.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.qiyei.common.ui.utils.StatusBarUtils
 
@@ -10,7 +11,7 @@ import com.qiyei.common.ui.utils.StatusBarUtils
  * @email: 1273482124@qq.com
  * @description: 基础父类Activity
  */
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,10 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     open protected fun initData():Unit{
+
+    }
+
+    open override fun onClick(v: View?) {
 
     }
 }

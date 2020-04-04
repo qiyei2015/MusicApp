@@ -18,34 +18,42 @@
             android:id="@+id/main_layout"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/avatar_imv"
-                android:layout_margin="@dimen/dimen_20"
-                android:layout_gravity="center_horizontal"
-                android:src="@mipmap/icon_avatar_logout">
-            </ImageView>
-
-            <TextView
+            <!--user login-->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/login_help"
-                android:textColor="@color/color_333333"
-                android:id="@+id/login_tv">
-            </TextView>
+                android:id="@+id/user_login_layout"
+                android:orientation="vertical">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dimen_20"
-                android:id="@+id/login_btn"
-                android:text="@string/login_now"
-                android:textAllCaps="false"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/selector_login_btn_background">
-            </Button>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/avatar_imv"
+                    android:layout_margin="@dimen/dimen_20"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@mipmap/icon_avatar_logout">
+                </ImageView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/login_help"
+                    android:textColor="@color/color_333333"
+                    android:id="@+id/login_tv">
+                </TextView>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dimen_20"
+                    android:id="@+id/user_login_btn"
+                    android:text="@string/login_now"
+                    android:textAllCaps="false"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector_login_btn_background">
+                </Button>
+            </LinearLayout>
 
             <!--后续再开发-->
             <LinearLayout

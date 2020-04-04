@@ -1,8 +1,9 @@
 package com.qiyei.music.ui.activity
 
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -12,6 +13,7 @@ import com.qiyei.music.ui.fragment.FindFragment
 import com.qiyei.music.ui.fragment.FriendFragment
 import com.qiyei.music.ui.fragment.MyFragment
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.menu_home_slide_left.*
 
 /**
  * @author Created by qiyei2015 on 2020/3/27.
@@ -27,9 +29,16 @@ class HomeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
         initView()
     }
+
+    override fun onClick(v: View?) {
+        super.onClick(v)
+        when (v?.id) {
+            R.id.user_login_btn -> startUserLoginActivity()
+        }
+    }
+
 
     override protected fun initView():Unit{
 
@@ -62,6 +71,11 @@ class HomeActivity : BaseActivity() {
             }
         }
         home_tab_layout.setupWithViewPager(home_view_pager)
-
+        user_login_btn.setOnClickListener(this)
     }
+
+    private fun startUserLoginActivity(){
+        startActivity(Intent(this@HomeActivity,UserLoginActivity::class.java))
+    }
+
 }
