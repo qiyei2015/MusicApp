@@ -89,7 +89,7 @@ class MyFragment : Fragment() {
             .download()
             .setBaseUrl(url1)
             .setPathUrl(url2)
-            .setFilePath(context?.cacheDir?.absolutePath)
+            .setFilePath(context?.cacheDir?.absolutePath + "1.jpg")
             .setBody(null)
             .setApiClazz(IRetrofitService::class.java)
             .build()
