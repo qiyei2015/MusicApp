@@ -3,7 +3,6 @@ package com.qiyei.network.server.okhttp;
 import android.os.Handler;
 import android.os.Looper;
 
-
 import com.qiyei.network.api.HttpResponse;
 import com.qiyei.network.server.HttpCallManager;
 import com.qiyei.network.server.HttpTask;
@@ -185,28 +184,40 @@ public class OkHttpEngine implements IHttpEngine {
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
 
-                ResponseBody responseBody = new ProgressResponseBody(response.body(), callback);
-                //read the body to file
-                BufferedSource source = responseBody.source();
-                File outFile = new File(task.getRequest().getFilePath());
-                outFile.delete();
-                outFile.getParentFile().mkdirs();
-                outFile.createNewFile();
-                BufferedSink sink = Okio.buffer(Okio.sink(outFile));
-                source.readAll(sink);
-                sink.flush();
-                source.close();
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String success = "success";
-                        final HttpResponse responseObj = new HttpResponse(success);
-                        callback.onSuccess(responseObj);
-                    }
-                });
+                try {
+                    ResponseBody responseBody = new ProgressResponseBody(response.body(), callback);
+                    //read the body to file
+                    BufferedSource source = responseBody.source();
+                    File outFile = new File(task.getRequest().getFilePath());
+                    outFile.delete();
+                    outFile.getParentFile().mkdirs();
+                    outFile.createNewFile();
+                    BufferedSink sink = Okio.buffer(Okio.sink(outFile));
+                    source.readAll(sink);
+                    sink.flush();
+                    source.close();
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            String success = "success";
+                            final HttpResponse responseObj = new HttpResponse(success);
+                            callback.onSuccess(responseObj);
+                        }
+                    });
 
-                //移除call
-                HttpCallManager.getInstance().removeCall(task.getTaskId());
+                } catch (final IOException e) {
+                    e.printStackTrace();
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            String success = "fail";
+                            callback.onFailure(e);
+                        }
+                    });
+                } finally {
+                    //移除call
+                    HttpCallManager.getInstance().removeCall(task.getTaskId());
+                }
             }
         });
     }
@@ -240,28 +251,39 @@ public class OkHttpEngine implements IHttpEngine {
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
 
-                ResponseBody responseBody = new ProgressResponseBody(response.body(),callback);
-                //read the body to file
-                BufferedSource source = responseBody.source();
-                File outFile = new File(task.getRequest().getFilePath());
-                outFile.delete();
-                outFile.getParentFile().mkdirs();
-                outFile.createNewFile();
-                BufferedSink sink = Okio.buffer(Okio.sink(outFile));
-                source.readAll(sink);
-                sink.flush();
-                source.close();
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String success = "success";
-                        final HttpResponse responseObj = new HttpResponse(success);
-                        callback.onSuccess(responseObj);
-                    }
-                });
-
-                //移除call
-                HttpCallManager.getInstance().removeCall(task.getTaskId());
+                try {
+                    ResponseBody responseBody = new ProgressResponseBody(response.body(),callback);
+                    //read the body to file
+                    BufferedSource source = responseBody.source();
+                    File outFile = new File(task.getRequest().getFilePath());
+                    outFile.delete();
+                    outFile.getParentFile().mkdirs();
+                    outFile.createNewFile();
+                    BufferedSink sink = Okio.buffer(Okio.sink(outFile));
+                    source.readAll(sink);
+                    sink.flush();
+                    source.close();
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            String success = "success";
+                            final HttpResponse responseObj = new HttpResponse(success);
+                            callback.onSuccess(responseObj);
+                        }
+                    });
+                } catch (final IOException e) {
+                    e.printStackTrace();
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            String success = "fail";
+                            callback.onFailure(e);
+                        }
+                    });
+                } finally {
+                    //移除call
+                    HttpCallManager.getInstance().removeCall(task.getTaskId());
+                }
             }
         });
     }
