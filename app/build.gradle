@@ -58,8 +58,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation project(':lib_common_ui')
-    implementation project(':lib_network_manager')
-    implementation project(':lib_image_manager')
+    implementation project(':lib_network')
+    implementation project(':lib_image')
 
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
