@@ -4,7 +4,7 @@
  * @email: 1273482124@qq.com
  * @description: AudioStatusException
  */
-package com.qiyei.audio.core
+package com.qiyei.audio.exception
 
 data class AudioStatusException(val code: Int, val msg: String) : Exception(msg) {
 

@@ -31,6 +31,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.core:core-ktx:$core_ktx_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
@@ -51,8 +55,8 @@ uploadArchives {
                 url = MAVEN_RELEASE_REPOSITORY_URL
                 pomVersion = pomVersion.concat("-RELEASE")
             }
-            repository (url : url){
-                authentication (userName: MAVEN_USERNAME,password : MAVEN_PASSWORD)
+            repository(url: url) {
+                authentication(userName: MAVEN_USERNAME, password: MAVEN_PASSWORD)
             }
 
             pom.project {

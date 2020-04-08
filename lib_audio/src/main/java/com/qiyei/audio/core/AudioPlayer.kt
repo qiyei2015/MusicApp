@@ -15,6 +15,7 @@ import android.os.Looper
 import android.os.Message
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.qiyei.audio.exception.AudioStatusException
 import com.qiyei.audio.model.AudioBean
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -32,7 +33,7 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
     /**
      * 核心播放类
      */
-    private var mMediaPlayer: MusicMediaPlayer? = MusicMediaPlayer()
+    private var mMediaPlayer: AudioMediaPlayer? = AudioMediaPlayer()
 
     /**
      * 焦点管理器
@@ -154,7 +155,12 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
             }
         } catch (e: Exception) {
             mAudioStatusListeners.forEach {
-                it.onError(AudioStatusException(1, "load fail"))
+                it.onError(
+                    AudioStatusException(
+                        1,
+                        "load fail"
+                    )
+                )
             }
         }
     }
@@ -178,7 +184,12 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
             }
         } catch (e: Exception) {
             mAudioStatusListeners.forEach {
-                it.onError(AudioStatusException(2, "开始失败"))
+                it.onError(
+                    AudioStatusException(
+                        2,
+                        "开始失败"
+                    )
+                )
             }
         }
     }

@@ -8,7 +8,7 @@ package com.qiyei.audio.core
 
 import android.media.MediaPlayer
 
-class MusicMediaPlayer : MediaPlayer(), MediaPlayer.OnCompletionListener {
+class AudioMediaPlayer : MediaPlayer(), MediaPlayer.OnCompletionListener {
 
 
     companion object {

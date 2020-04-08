@@ -43,30 +43,82 @@ class AudioController(private val mContext: Context) {
     }
 
     /**
+     * 添加所有
+     */
+    fun addQueue(beans:List<AudioBean>){
+        mQueue.addAll(beans)
+    }
+
+    /**
      * 添加到播放队列中
      */
     fun addQueue(bean: AudioBean) {
         mQueue.add(bean)
     }
 
+    /**
+     * 删除队列中的歌曲
+     */
+    fun removeQueue(index:Int) {
+        mQueue.removeAt(index)
+    }
+
+    /**
+     * 清空播放列表
+     */
+    fun clearQueue(){
+        mQueue.clear()
+    }
+
+    /**
+     * 获取播放模式
+     */
+    fun getPlayMode():PlayMode {
+        return mMode
+    }
+
+    /**
+     * 设置播放模式
+     */
+    fun setPlayMode(mode: PlayMode){
+        mMode = mode
+    }
+
+    /**
+     * 播放
+     */
     fun play() {
-
+        mPlayer.load(mQueue[mIndex])
     }
 
+    /**
+     * 下一首
+     */
     fun next() {
-
+        val bean = getNextPlay()
+        mPlayer.load(bean)
     }
 
+    /**
+     * 上一首
+     */
     fun prev() {
-
+        val bean = getPrevPlay()
+        mPlayer.load(bean)
     }
 
+    /**
+     * 暂停
+     */
     fun pause() {
-
+        mPlayer.pause()
     }
 
+    /**
+     * 重新播放
+     */
     fun resume() {
-
+        mPlayer.resume()
     }
 
     /**

@@ -6,6 +6,7 @@
  */
 package com.qiyei.audio.core
 
+import com.qiyei.audio.exception.AudioStatusException
 import com.qiyei.audio.model.AudioBean
 
 

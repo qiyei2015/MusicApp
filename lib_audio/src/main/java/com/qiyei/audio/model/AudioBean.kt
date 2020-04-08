@@ -6,7 +6,14 @@
  */
 package com.qiyei.audio.model
 
-class AudioBean(var uri: String) {
+import android.graphics.Bitmap
+
+class AudioBean(
+    var audioName: String,
+    var albumName: String,
+    var uri: String,
+    var albumBitmap: Bitmap
+) {
 
 
 }
