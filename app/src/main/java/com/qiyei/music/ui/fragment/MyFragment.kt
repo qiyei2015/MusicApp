@@ -1,17 +1,19 @@
 package com.qiyei.music.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
+import com.qiyei.audio.ui.activity.MusicPlayerActivity
 import com.qiyei.music.R
 import com.qiyei.network.api.HttpManager
 import com.qiyei.network.api.HttpRequest
 import com.qiyei.network.api.IHttpTransferListener
 import com.qiyei.network.server.retrofit.IRetrofitService
-import okhttp3.ResponseBody
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

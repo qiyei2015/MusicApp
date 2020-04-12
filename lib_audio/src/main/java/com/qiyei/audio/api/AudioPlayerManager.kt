@@ -60,7 +60,7 @@ class AudioPlayerManager private constructor(private val context: Context){
      * 获取播放模式
      */
     fun getPlayMode(): PlayMode {
-
+        return PlayMode.RANDOM
     }
 
     /**
@@ -105,19 +105,19 @@ class AudioPlayerManager private constructor(private val context: Context){
 
     }
 
-    /**
-     * 获取下一首要播放的
-     */
-    fun getNextPlay(): AudioBean {
-
-    }
-
-    /**
-     * 获取上一首播放
-     */
-    fun getPrevPlay(): AudioBean {
-
-    }
+//    /**
+//     * 获取下一首要播放的
+//     */
+//    fun getNextPlay(): AudioBean {
+//        return
+//    }
+//
+//    /**
+//     * 获取上一首播放
+//     */
+//    fun getPrevPlay(): AudioBean {
+//
+//    }
 
 
     /**

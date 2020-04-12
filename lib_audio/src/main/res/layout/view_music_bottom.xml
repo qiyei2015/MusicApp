@@ -4,11 +4,20 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#dddddd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </View>
+
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_45"
+        android:layout_height="@dimen/dp_45"
         android:id="@+id/album_imageView"
-        android:scaleType="center"
+        android:src="@mipmap/album_test"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -46,7 +55,7 @@
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="5dp"
         android:scaleType="center"
-        android:src="@mipmap/note_btn_play_white"
+        android:src="@mipmap/icon_btn_audio_play_white"
         android:id="@+id/music_play_btn_imageView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/music_list_btn_imageView"
