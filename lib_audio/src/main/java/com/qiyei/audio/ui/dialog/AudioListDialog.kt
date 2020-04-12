@@ -22,7 +22,7 @@ class AudioListDialog(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_audio_list)
+        setContentView(R.layout.audio_dialog_audio_list)
         setCancelable(true)
     }
 

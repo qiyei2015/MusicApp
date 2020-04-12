@@ -42,7 +42,7 @@ class MusicBottomView @JvmOverloads constructor(
     private var mCurrentBean: AudioBean? = null
 
     init {
-        val contentView = LayoutInflater.from(context).inflate(R.layout.view_music_bottom,this)
+        val contentView = LayoutInflater.from(context).inflate(R.layout.audio_view_music_bottom,this)
         mAlbumView = findViewById(R.id.album_imageView)
         mMusicNameTv = findViewById(R.id.music_name_tv)
         mAlbumNameTv = findViewById(R.id.album_name_tv)
@@ -86,7 +86,7 @@ class MusicBottomView @JvmOverloads constructor(
      */
     fun startPlay(bean: AudioBean?){
         isPlay = true
-        mMusicPlayBtn.setImageDrawable(resources.getDrawable(R.mipmap.icon_btn_audio_pause_white,null))
+        mMusicPlayBtn.setImageDrawable(resources.getDrawable(R.mipmap.icon_audio_btn_pause_white,null))
 //        mAlbumView.setImageBitmap(bean?.albumBitmap)
 //        mMusicNameTv.text = bean?.audioName
 //        mAlbumNameTv.text = bean?.albumName
@@ -98,7 +98,7 @@ class MusicBottomView @JvmOverloads constructor(
      */
     fun stopPlay(){
         isPlay = false
-        mMusicPlayBtn.setImageDrawable(resources.getDrawable(R.mipmap.icon_btn_audio_play_white,null))
+        mMusicPlayBtn.setImageDrawable(resources.getDrawable(R.mipmap.icon_audio_btn_play_white,null))
         mAlbumRotateAnimation.pause()
     }
 
