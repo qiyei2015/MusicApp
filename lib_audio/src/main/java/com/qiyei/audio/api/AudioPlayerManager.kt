@@ -154,6 +154,10 @@ class AudioPlayerManager private constructor(val mContext: Context){
         return mAudioController?.getNextPlay()
     }
 
+    fun getCurrentPlay():AudioBean?{
+        return AudioBean()
+    }
+
 
     /**
      * 添加收藏

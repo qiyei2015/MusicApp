@@ -8,9 +8,12 @@ package com.qiyei.audio.component.service
 
 import android.app.Service
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.qiyei.audio.api.AudioPlayerManager
+import com.qiyei.audio.component.notification.NotificationHelper
 import com.qiyei.audio.model.AudioBean
 import java.io.Serializable
 
@@ -32,14 +35,20 @@ class AudioService :Service() {
     }
 
     private var mBeans:MutableList<AudioBean>? = null
+    @ExperimentalStdlibApi
+    private var mManager:AudioPlayerManager? = null
 
     override fun onCreate() {
         super.onCreate()
     }
 
+    @ExperimentalStdlibApi
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         mBeans = intent?.getSerializableExtra(DATA) as MutableList<AudioBean>
         Log.i(TAG,"onStartCommand startId=$startId")
+        //弹通知
+        NotificationHelper.startNotification(this,mManager?.getCurrentPlay()!!)
         return super.onStartCommand(intent, flags, startId)
     }
 
