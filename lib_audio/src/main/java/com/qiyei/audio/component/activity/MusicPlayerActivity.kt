@@ -1,4 +1,4 @@
-package com.qiyei.audio.ui.activity
+package com.qiyei.audio.component.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

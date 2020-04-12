@@ -10,6 +10,7 @@ import com.qiyei.audio.model.AudioBean
 
 class FavouriteManager {
 
+
     /**
      * 添加收藏
      */

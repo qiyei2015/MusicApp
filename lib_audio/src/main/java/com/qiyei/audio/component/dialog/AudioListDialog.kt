@@ -4,13 +4,10 @@
  * @email: 1273482124@qq.com
  * @description: AudioListDialog
  */
-package com.qiyei.audio.ui.dialog
+package com.qiyei.audio.component.dialog
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.qiyei.audio.R
 
@@ -28,7 +25,6 @@ class AudioListDialog(
 
     override fun show() {
         super.show()
-
 
     }
 

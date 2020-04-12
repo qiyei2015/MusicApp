@@ -4,7 +4,7 @@
  * @email: 1273482124@qq.com
  * @description: MusicBottomView
  */
-package com.qiyei.audio.ui.view
+package com.qiyei.audio.component.view
 
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -18,8 +18,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.qiyei.audio.R
 import com.qiyei.audio.model.AudioBean
-import com.qiyei.audio.ui.activity.MusicPlayerActivity
-import com.qiyei.audio.ui.dialog.AudioListDialog
+import com.qiyei.audio.component.activity.MusicPlayerActivity
+import com.qiyei.audio.component.dialog.AudioListDialog
 
 class MusicBottomView @JvmOverloads constructor(
     context: Context,

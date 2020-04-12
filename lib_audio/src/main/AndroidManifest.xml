@@ -3,7 +3,7 @@
     package="com.qiyei.audio">
 
     <application>
-        <activity android:name=".ui.activity.MusicPlayerActivity"></activity>
+        <activity android:name=".component.activity.MusicPlayerActivity"></activity>
     </application>
 
 </manifest>
