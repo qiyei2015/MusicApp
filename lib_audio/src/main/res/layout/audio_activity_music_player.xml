@@ -75,39 +75,39 @@
 
             <ImageView
                 android:id="@+id/favourite_btn_imv"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
                 android:scaleType="center"
-                android:src="@mipmap/icon_audio_operate_favorite" />
+                android:src="@drawable/selector_favorite_btn_imv_background" />
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
                 android:id="@+id/download_btn_imv"
                 android:scaleType="center"
                 android:src="@mipmap/icon_audio_operate_download" />
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
                 android:scaleType="center"
                 android:id="@+id/ring_btn_imv"
                 android:src="@mipmap/icon_audio_operate_ring" />
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
                 android:scaleType="center"
                 android:id="@+id/comment_btn_imv"
                 android:src="@mipmap/icon_audio_operate_comment" />
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
                 android:scaleType="center"
                 android:id="@+id/more_btn_imv"
@@ -160,40 +160,40 @@
 
             <ImageView
                 android:id="@+id/play_mode_btn_imv"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/dp_35"
+                android:layout_height="@dimen/dp_35"
                 android:layout_weight="1"
                 android:src="@mipmap/icon_audio_play_mode_loop"
                 android:scaleType="center" />
 
             <ImageView
                 android:id="@+id/prev_btn_imv"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/dp_35"
+                android:layout_height="@dimen/dp_35"
                 android:layout_weight="1"
                 android:scaleType="center"
                 android:src="@mipmap/icon_audio_music_play_prev" />
 
             <ImageView
                 android:id="@+id/play_btn_imv"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="@dimen/dp_80"
                 android:layout_weight="1"
                 android:scaleType="center"
                 android:src="@mipmap/icon_audio_music_play" />
 
             <ImageView
                 android:id="@+id/next_btn_play"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/dp_35"
+                android:layout_height="@dimen/dp_35"
                 android:layout_weight="1"
                 android:scaleType="center"
                 android:src="@mipmap/icon_audio_music_play_next" />
 
             <ImageView
                 android:id="@+id/show_more_music"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/dp_35"
+                android:layout_height="@dimen/dp_35"
                 android:layout_weight="1"
                 android:scaleType="center"
                 android:src="@mipmap/icon_audio_music_play_more" />
