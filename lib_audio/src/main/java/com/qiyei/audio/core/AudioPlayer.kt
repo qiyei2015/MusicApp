@@ -18,7 +18,7 @@ import androidx.annotation.RequiresApi
 import com.qiyei.audio.exception.AudioStatusException
 import com.qiyei.audio.model.AudioBean
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListener,
     MediaPlayer.OnBufferingUpdateListener,
     MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
@@ -27,7 +27,7 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
     companion object {
         const val TAG = "AudioPlayer"
         private const val TIME_MSG = 0x1
-        private const val TIME_INVAL = 100
+        private const val TIME_INTERVAL = 100
     }
 
     /**
@@ -80,7 +80,7 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
                         mAudioStatusListeners.forEach {
                             it.onAudioProgress(getStatus(), getCurrentProgress(), getDuration())
                         }
-                        sendEmptyMessageDelayed(TIME_MSG, TIME_INVAL.toLong())
+                        sendEmptyMessageDelayed(TIME_MSG, TIME_INTERVAL.toLong())
                     }
                 }
             }

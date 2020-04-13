@@ -7,13 +7,9 @@
 package com.qiyei.audio.core
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.qiyei.audio.model.AudioBean
 import kotlin.random.Random
 
-@ExperimentalStdlibApi
-@RequiresApi(Build.VERSION_CODES.O)
 class AudioController(private val mContext: Context) {
 
     /**
@@ -24,7 +20,7 @@ class AudioController(private val mContext: Context) {
     /**
      * 歌曲队列
      */
-    private lateinit var mQueue: ArrayDeque<AudioBean>
+    private lateinit var mQueue: MutableList<AudioBean>
 
     /**
      * 播放模式
@@ -38,7 +34,7 @@ class AudioController(private val mContext: Context) {
 
     init {
         mPlayer = AudioPlayer(mContext)
-        mQueue = ArrayDeque()
+        mQueue = mutableListOf()
         mMode = PlayMode.REPEAT
     }
 

@@ -11,10 +11,10 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class AudioBean(
-    var audioName: String?,
-    var albumName: String?,
-    var uri: String?,
-    var albumBitmap: Bitmap?
+    var audioName: String? = null,
+    var albumName: String? = null,
+    var uri: String? = null,
+    var albumBitmap: Bitmap? = null
 ) :Parcelable{
 
     constructor(parcel: Parcel) : this(

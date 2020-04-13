@@ -1,6 +1,7 @@
 package com.qiyei.music
 
 import android.app.Application
+import com.qiyei.audio.api.AudioPlayerManager
 
 /**
  * @author Created by qiyei2015 on 2020/3/27.
@@ -16,7 +17,9 @@ class MusicApplication:Application() {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this;
+        instance = this
+
+        AudioPlayerManager.init(this)
     }
 
 }

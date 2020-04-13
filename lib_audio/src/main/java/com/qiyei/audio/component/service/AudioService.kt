@@ -26,7 +26,6 @@ class AudioService :Service() {
         /**
          * 启动Service
          */
-        @ExperimentalStdlibApi
         fun startService(beans:MutableList<AudioBean>){
             var intent = Intent(AudioPlayerManager.mContext,AudioService::class.java)
             intent.putExtra(DATA,beans as Serializable)
@@ -35,15 +34,13 @@ class AudioService :Service() {
     }
 
     private var mBeans:MutableList<AudioBean>? = null
-    @ExperimentalStdlibApi
+
     private var mManager:AudioPlayerManager? = null
 
     override fun onCreate() {
         super.onCreate()
     }
 
-    @ExperimentalStdlibApi
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         mBeans = intent?.getSerializableExtra(DATA) as MutableList<AudioBean>
         Log.i(TAG,"onStartCommand startId=$startId")

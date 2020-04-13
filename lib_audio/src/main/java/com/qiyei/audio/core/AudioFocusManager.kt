@@ -10,9 +10,8 @@ import android.content.Context
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
-import androidx.annotation.RequiresApi
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 class AudioFocusManager(
     private val mContext: Context,
     private val mAudioFocusListener: AudioFocusChangeListener
@@ -25,10 +24,15 @@ class AudioFocusManager(
         mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
     /**
-     * 焦点请求
+     * 音频焦点请求
      */
-    private var mFocusRequest: AudioFocusRequest =
-        AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).build()
+    private lateinit var mFocusRequest: AudioFocusRequest
+
+    init {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            mFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).build()
+        }
+    }
 
     override fun onAudioFocusChange(focusChange: Int) {
         when (focusChange) {
@@ -43,14 +47,26 @@ class AudioFocusManager(
      * 申请焦点
      */
     fun requestAudioFocus(): Boolean {
-        return mAudioManager.requestAudioFocus(mFocusRequest) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            mAudioManager.requestAudioFocus(mFocusRequest) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+        } else {
+            mAudioManager.requestAudioFocus(
+                this,
+                AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN
+            ) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+        }
     }
 
     /**
      * 取消焦点
      */
     fun abandonAudioFocus() {
-        mAudioManager.abandonAudioFocusRequest(mFocusRequest)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            mAudioManager.abandonAudioFocusRequest(mFocusRequest)
+        } else {
+            mAudioManager.abandonAudioFocus(this)
+        }
     }
 
     interface AudioFocusChangeListener {

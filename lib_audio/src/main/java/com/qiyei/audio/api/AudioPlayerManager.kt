@@ -15,8 +15,6 @@ import com.qiyei.audio.favorite.FavouriteManager
 import com.qiyei.audio.model.AudioBean
 
 
-@ExperimentalStdlibApi
-@RequiresApi(Build.VERSION_CODES.O)
 class AudioPlayerManager private constructor(val mContext: Context){
 
     /**
