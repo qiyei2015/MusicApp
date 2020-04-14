@@ -58,6 +58,13 @@
         </ImageView>
     </RelativeLayout>
 
+    <com.qiyei.audio.component.view.AudioStylusView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_layout"
+        android:layout_above="@+id/bottom_layout"
+        android:id="@+id/audio_stylus_view">
+    </com.qiyei.audio.component.view.AudioStylusView>
 
     <RelativeLayout
         android:layout_width="match_parent"
