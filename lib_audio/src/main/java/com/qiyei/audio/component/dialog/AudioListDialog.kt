@@ -8,6 +8,8 @@ package com.qiyei.audio.component.dialog
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Display
+import android.view.Window
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.qiyei.audio.R
 
@@ -20,7 +22,14 @@ class AudioListDialog(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.audio_dialog_audio_list)
+
+        val dm = context.resources.displayMetrics
+        val layoutParams = window?.attributes
+        layoutParams?.width = dm.widthPixels
+        window?.attributes = layoutParams
         setCancelable(true)
+        setCanceledOnTouchOutside(true)
+
     }
 
     override fun show() {

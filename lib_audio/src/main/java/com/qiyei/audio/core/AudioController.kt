@@ -88,6 +88,13 @@ class AudioController(private val mContext: Context) {
     }
 
     /**
+     * 是否播放
+     */
+    fun isPlay():Boolean {
+        return mPlayer.getStatus() == Status.STARTED
+    }
+
+    /**
      * 下一首
      */
     fun next() {

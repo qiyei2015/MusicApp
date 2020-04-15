@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.qiyei.audio.R
 import com.qiyei.audio.api.AudioPlayerManager
+import com.qiyei.audio.component.dialog.AudioListDialog
 import com.qiyei.audio.core.PlayMode
 import com.qiyei.audio.model.AudioBean
 import kotlinx.android.synthetic.main.audio_activity_music_player.*
@@ -30,6 +31,7 @@ class MusicPlayerActivity : AppCompatActivity(), View.OnClickListener {
             R.id.prev_btn_imv -> playPrev()
             R.id.play_btn_imv -> toggleMusicPlay()
             R.id.next_btn_play -> playNext()
+            R.id.show_more_music -> showMusicList()
         }
     }
 
@@ -46,6 +48,7 @@ class MusicPlayerActivity : AppCompatActivity(), View.OnClickListener {
         prev_btn_imv.setOnClickListener(this)
         play_btn_imv.setOnClickListener(this)
         next_btn_play.setOnClickListener(this)
+        show_more_music.setOnClickListener(this)
     }
 
     private fun togglePlayMode() {
@@ -78,7 +81,7 @@ class MusicPlayerActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun playPrev() {
-        AudioPlayerManager.getInstance().prev()
+        AudioPlayerManager.getInstance().playPrev()
     }
 
     private fun toggleMusicPlay() {
@@ -94,6 +97,11 @@ class MusicPlayerActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun playNext() {
+        AudioPlayerManager.getInstance().playNext()
+    }
 
+    private fun showMusicList(){
+        val dialog = AudioListDialog(MusicPlayerActivity@this)
+        dialog.show()
     }
 }

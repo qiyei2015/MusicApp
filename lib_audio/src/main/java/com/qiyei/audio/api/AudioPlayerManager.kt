@@ -111,16 +111,26 @@ class AudioPlayerManager private constructor(val mContext: Context){
     }
 
     /**
+     * 是否处于播放状态
+     */
+    fun isPlay(): Boolean {
+        mAudioController?.let {
+            return it.isPlay()
+        }
+        return false
+    }
+
+    /**
      * 下一首
      */
-    fun next(){
+    fun playNext(){
         mAudioController?.next()
     }
 
     /**
      * 上一首
      */
-    fun prev() {
+    fun playPrev() {
         mAudioController?.prev()
     }
 
