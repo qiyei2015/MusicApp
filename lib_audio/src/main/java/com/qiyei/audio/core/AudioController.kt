@@ -7,20 +7,27 @@
 package com.qiyei.audio.core
 
 import android.content.Context
+import android.util.Log
+import androidx.core.location.LocationManagerCompat
+import com.qiyei.audio.exception.AudioStatusException
 import com.qiyei.audio.model.AudioBean
 import kotlin.random.Random
 
 class AudioController(private val mContext: Context) {
 
+    companion object {
+        const val TAG = "AudioController"
+    }
+
     /**
      * 音频播放
      */
-    private var mPlayer: AudioPlayer
+    private var mPlayer: AudioPlayer = AudioPlayer(mContext)
 
     /**
      * 歌曲队列
      */
-    private lateinit var mQueue: MutableList<AudioBean>
+    private var mQueue: MutableList<AudioBean> = mutableListOf()
 
     /**
      * 播放模式
@@ -33,8 +40,6 @@ class AudioController(private val mContext: Context) {
     private var mIndex: Int = 0;
 
     init {
-        mPlayer = AudioPlayer(mContext)
-        mQueue = mutableListOf()
         mMode = PlayMode.REPEAT
     }
 
@@ -42,6 +47,7 @@ class AudioController(private val mContext: Context) {
      * 添加所有
      */
     fun addQueue(beans:List<AudioBean>){
+        Log.i(TAG,"addQueue beans=$beans")
         mQueue.addAll(beans)
     }
 
@@ -84,6 +90,7 @@ class AudioController(private val mContext: Context) {
      * 播放
      */
     fun play() {
+        Log.i(TAG,"play bean=${mQueue[mIndex]}")
         mPlayer.load(mQueue[mIndex])
     }
 
@@ -168,5 +175,13 @@ class AudioController(private val mContext: Context) {
             }
         }
         return mQueue[mIndex]
+    }
+
+    fun addAudioStatusListener(listener:IAudioStatusListener){
+        mPlayer.addAudioStatusListener(listener)
+    }
+
+    fun removeAudioStatusListener(listener: IAudioStatusListener){
+        mPlayer.removeAudioStatusListener(listener)
     }
 }

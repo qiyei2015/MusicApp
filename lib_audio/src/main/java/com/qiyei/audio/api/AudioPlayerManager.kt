@@ -10,6 +10,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.qiyei.audio.core.AudioController
+import com.qiyei.audio.core.IAudioStatusListener
 import com.qiyei.audio.core.PlayMode
 import com.qiyei.audio.favorite.FavouriteManager
 import com.qiyei.audio.model.AudioBean
@@ -43,6 +44,8 @@ class AudioPlayerManager private constructor(val mContext: Context){
             return instance!!
         }
     }
+
+    private val mStatusListenerMap:MutableMap<String,IAudioStatusListener> = mutableMapOf()
 
     /**
      * 音乐播放控制器
@@ -166,6 +169,21 @@ class AudioPlayerManager private constructor(val mContext: Context){
         return AudioBean()
     }
 
+
+    fun addAudioStatusListener(name:String,listener: IAudioStatusListener){
+        mStatusListenerMap[name] = listener
+        mAudioController?.addAudioStatusListener(listener)
+    }
+
+    fun removeAudioStatusListener(listener: IAudioStatusListener){
+        mAudioController?.removeAudioStatusListener(listener)
+    }
+
+    fun removeAudioStatusListener(name: String){
+        mStatusListenerMap[name]?.let {
+            mAudioController?.removeAudioStatusListener(it)
+        }
+    }
 
     /**
      * 添加收藏

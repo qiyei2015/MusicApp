@@ -8,6 +8,8 @@ package com.qiyei.audio.component.adapter
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +30,7 @@ class AudioStylusPagerAdapter(private val mContext: Context, var mQueues:Mutable
         private const val ANIM_DURATION:Long = 3000
     }
 
-    val mAnimMap:SparseArray<ObjectAnimator> = SparseArray()
+    private val mAnimMap:SparseArray<ObjectAnimator> = SparseArray()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AudioBeanHolder {
         val view = LayoutInflater.from(mContext).inflate(R.layout.audio_recycler_item_audio_stylus,parent,false)
@@ -41,7 +43,7 @@ class AudioStylusPagerAdapter(private val mContext: Context, var mQueues:Mutable
 
     override fun onBindViewHolder(holder: AudioBeanHolder, position: Int) {
         val bean = mQueues[position]
-        holder.mCircleView.setImageBitmap(bean.albumBitmap)
+        holder.mCircleView.setImageBitmap(BitmapFactory.decodeResource(mContext.resources,R.mipmap.album_test))
 
         if (mAnimMap[position] == null){
             val animator = ObjectAnimator.ofFloat(holder.mCircleView,View.ROTATION.name,0f,360f)

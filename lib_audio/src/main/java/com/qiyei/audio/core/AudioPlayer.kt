@@ -9,12 +9,10 @@ package com.qiyei.audio.core
 import android.content.Context
 import android.media.MediaPlayer
 import android.net.wifi.WifiManager
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.qiyei.audio.exception.AudioStatusException
 import com.qiyei.audio.model.AudioBean
 
@@ -43,7 +41,7 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
     /**
      * 音频状态监听器
      */
-    private val mAudioStatusListeners: List<IAudioStatusListener> = listOf()
+    private val mAudioStatusListeners: MutableList<IAudioStatusListener> = mutableListOf()
 
     /**
      * wifi lock 用于保活
@@ -98,6 +96,7 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
+        Log.i(TAG, "onPrepared")
         start()
     }
 
@@ -144,6 +143,7 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
     fun load(bean: AudioBean) {
         try {//重置播放器
             mCurrentBean = bean
+            Log.i(TAG, "load")
             mMediaPlayer?.reset()
             mMediaPlayer?.setDataSource(bean.uri)
             //准备
@@ -151,16 +151,13 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
 
             //发送视频加载事件
             mAudioStatusListeners.onEach {
+                Log.i(TAG, "onAudioLoaded it=$it")
                 it.onAudioLoaded(bean)
             }
         } catch (e: Exception) {
+            Log.i(TAG, "load Exception,size=${mAudioStatusListeners.size}")
             mAudioStatusListeners.forEach {
-                it.onError(
-                    AudioStatusException(
-                        1,
-                        "load fail"
-                    )
-                )
+                it.onError(AudioStatusException(1, "load fail"))
             }
         }
     }
@@ -185,10 +182,7 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
         } catch (e: Exception) {
             mAudioStatusListeners.forEach {
                 it.onError(
-                    AudioStatusException(
-                        2,
-                        "开始失败"
-                    )
+                    AudioStatusException(2, "开始失败")
                 )
             }
         }
@@ -277,5 +271,15 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
      */
     fun setVolumn(left: Float, right: Float) {
         mMediaPlayer?.setVolume(left, right)
+    }
+
+    fun addAudioStatusListener(listener: IAudioStatusListener) {
+        Log.i(TAG, "addAudioStatusListener,listener=${listener}")
+        mAudioStatusListeners.add(listener)
+    }
+
+    fun removeAudioStatusListener(listener: IAudioStatusListener) {
+        Log.i(TAG, "removeAudioStatusListener,listener=${listener}")
+        mAudioStatusListeners.remove(listener)
     }
 }
