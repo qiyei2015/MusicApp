@@ -46,7 +46,7 @@ public class HttpServer implements IHttpExecutor {
      * 静态内部类
      */
     private static class SingleHolder{
-        private final static HttpServer sServer = new HttpServer(new OkHttpEngine());
+        private final static HttpServer sServer = new HttpServer(new RetrofitEngine());
     }
 
     /**

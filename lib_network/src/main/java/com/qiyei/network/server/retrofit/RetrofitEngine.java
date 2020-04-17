@@ -75,7 +75,8 @@ public class RetrofitEngine implements IHttpEngine {
             return ;
         }
         //设置task到okHttp拦截器中
-        setOkHttpInterceptorTag(call,task);
+        // TODO: 2020/4/18
+        //setOkHttpInterceptorTag(call,task);
         //将任务加到队列里面
         HttpCallManager.getInstance().addCall(task.getTaskId(),call);
 
@@ -112,7 +113,8 @@ public class RetrofitEngine implements IHttpEngine {
             return ;
         }
         //设置task到okHttp拦截器中
-        setOkHttpInterceptorTag(call,task);
+        // TODO: 2020/4/18  
+        //setOkHttpInterceptorTag(call,task);
         //将任务加到队列里面
         HttpCallManager.getInstance().addCall(task.getTaskId(),call);
 
@@ -177,7 +179,7 @@ public class RetrofitEngine implements IHttpEngine {
             return ;
         }
         //设置task到okHttp拦截器中
-        setOkHttpInterceptorTag(call,task);
+        //setOkHttpInterceptorTag(call,task);
 
         //将任务加到队列里面
         HttpCallManager.getInstance().addCall(task.getTaskId(),call);
