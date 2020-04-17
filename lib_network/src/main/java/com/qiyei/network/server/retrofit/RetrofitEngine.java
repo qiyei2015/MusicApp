@@ -31,7 +31,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -76,7 +78,7 @@ public class RetrofitEngine implements IHttpEngine {
         }
         //设置task到okHttp拦截器中
         // TODO: 2020/4/18
-        //setOkHttpInterceptorTag(call,task);
+        setOkHttpInterceptorTag(call,task);
         //将任务加到队列里面
         HttpCallManager.getInstance().addCall(task.getTaskId(),call);
 
@@ -114,7 +116,7 @@ public class RetrofitEngine implements IHttpEngine {
         }
         //设置task到okHttp拦截器中
         // TODO: 2020/4/18  
-        //setOkHttpInterceptorTag(call,task);
+        setOkHttpInterceptorTag(call,task);
         //将任务加到队列里面
         HttpCallManager.getInstance().addCall(task.getTaskId(),call);
 
@@ -179,7 +181,7 @@ public class RetrofitEngine implements IHttpEngine {
             return ;
         }
         //设置task到okHttp拦截器中
-        //setOkHttpInterceptorTag(call,task);
+        setOkHttpInterceptorTag(call,task);
 
         //将任务加到队列里面
         HttpCallManager.getInstance().addCall(task.getTaskId(),call);
@@ -189,29 +191,6 @@ public class RetrofitEngine implements IHttpEngine {
             public void onResponse(Call<R> call, final Response<R> response) {
                 //可以在这里构造ProgressResponseBody来实现进度的监听
                 final ResponseBody responseBody = (ResponseBody) response.body();
-//                final ProgressResponseBody responseBody = new ProgressResponseBody((ResponseBody) response.body(),callback);
-//                new Thread(){
-//                    @Override
-//                    public void run() {
-//
-//                        //read the body to file
-//                        BufferedSource source = responseBody.source();
-//                        File outFile = new File(task.getRequest().getFilePath());
-//                        outFile.delete();
-//                        outFile.getParentFile().mkdirs();
-//                        try {
-//                            outFile.createNewFile();
-//                            BufferedSink sink = Okio.buffer(Okio.sink(outFile));
-//                            source.readAll(sink);
-//                            sink.flush();
-//                            source.close();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    }
-//                }.start();
-
                 new Thread(){
                     @Override
                     public void run() {
@@ -302,10 +281,16 @@ public class RetrofitEngine implements IHttpEngine {
         //反射设置 tag
         Class<?> clazz = request.getClass();
         try {
-            Field field = clazz.getDeclaredField("tag");
+            Field field = clazz.getDeclaredField("tags");
             field.setAccessible(true);
             //将task设置成tag字段，保存数据
-            field.set(request,task);
+            Map<Class<?>, Object> old = (Map<Class<?>, Object>) field.get(request);
+            Map<Class<?>, Object> map = new HashMap<>();
+            for (Map.Entry<Class<?>, Object> entry: old.entrySet()){
+                map.put(entry.getKey(),entry.getValue());
+            }
+            map.put(HttpTask.class,task);
+            field.set(request,map);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
