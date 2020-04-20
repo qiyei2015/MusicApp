@@ -3,19 +3,20 @@ package com.qiyei.audio.component.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.qiyei.audio.R
 import com.qiyei.audio.api.AudioPlayerManager
 import com.qiyei.audio.component.dialog.AudioListDialog
-import com.qiyei.audio.component.view.AudioStylusView
 import com.qiyei.audio.core.IAudioStatusListener
 import com.qiyei.audio.core.PlayMode
 import com.qiyei.audio.core.Status
 import com.qiyei.audio.exception.AudioStatusException
 import com.qiyei.audio.model.AudioBean
+import com.qiyei.audio.model.MockData
+import com.qiyei.common.ui.activity.BaseActivity
+import com.qiyei.image.ImageManager
 import kotlinx.android.synthetic.main.audio_activity_music_player.*
 
-class MusicPlayerActivity : AppCompatActivity(), View.OnClickListener {
+class MusicPlayerActivity : BaseActivity(){
 
 
     companion object {
@@ -39,7 +40,6 @@ class MusicPlayerActivity : AppCompatActivity(), View.OnClickListener {
         AudioPlayerManager.getInstance().removeAudioStatusListener("music")
     }
 
-
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.favourite_btn_imv -> toggleMusicFavourite()
@@ -52,9 +52,10 @@ class MusicPlayerActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    private fun initData() {
+     override fun initData() {
         isPlay = false
-        mCurrentBean = AudioBean()
+        AudioPlayerManager.getInstance().addQueue(MockData.queues)
+
         AudioPlayerManager.getInstance().addAudioStatusListener("music",object :IAudioStatusListener{
             override fun onAudioLoaded(bean: AudioBean?) {
                 Log.i(TAG,"onAudioLoaded")
@@ -65,7 +66,9 @@ class MusicPlayerActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onAudioProgress(status: Status, progress: Int, maxLength: Int) {
-
+                music_seek_bar.max = maxLength
+                music_seek_bar.progress = progress
+                Log.i(TAG,"onAudioProgress,status=$status,progress=$progress,maxLength=$maxLength")
             }
 
             override fun onAudioCompleted(bean: AudioBean?) {
@@ -86,7 +89,7 @@ class MusicPlayerActivity : AppCompatActivity(), View.OnClickListener {
         })
     }
 
-    private fun initView() {
+    override fun initView() {
         play_btn_imv.setImageDrawable(getDrawable(R.mipmap.icon_audio_music_play))
 
         favourite_btn_imv.setOnClickListener(this)
@@ -95,8 +98,15 @@ class MusicPlayerActivity : AppCompatActivity(), View.OnClickListener {
         play_btn_imv.setOnClickListener(this)
         next_btn_play.setOnClickListener(this)
         show_more_music.setOnClickListener(this)
+
         AudioPlayerManager.getInstance().play()
+
+        audio_stylus_view.setQueue(AudioPlayerManager.getInstance().getQueue())
         isPlay = true
+
+        mCurrentBean = AudioPlayerManager.getInstance().getCurrentPlay()
+        Log.i(TAG,"mCurrentBean?.albumPic=${mCurrentBean?.albumPic}")
+        ImageManager.getInstance().loadForViewGroup(music_player_background_layout,mCurrentBean?.albumPic)
     }
 
     private fun togglePlayMode() {

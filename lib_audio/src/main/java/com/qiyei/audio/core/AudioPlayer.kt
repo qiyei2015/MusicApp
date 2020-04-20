@@ -172,7 +172,7 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
                 //启用lock
                 mWifiLock?.acquire()
                 //更新进度
-                //mHandler.send
+                mHandler.sendEmptyMessage(TIME_MSG)
                 mAudioStatusListeners.forEach {
                     it.onAudioStarted(mCurrentBean)
                 }
@@ -182,7 +182,7 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
         } catch (e: Exception) {
             mAudioStatusListeners.forEach {
                 it.onError(
-                    AudioStatusException(2, "开始失败")
+                    AudioStatusException(2, "start execution = ${e.message}")
                 )
             }
         }

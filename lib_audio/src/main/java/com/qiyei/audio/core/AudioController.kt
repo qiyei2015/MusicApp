@@ -72,6 +72,10 @@ class AudioController(private val mContext: Context) {
         mQueue.clear()
     }
 
+    fun getQueue():MutableList<AudioBean>{
+        return mQueue
+    }
+
     /**
      * 获取播放模式
      */
@@ -129,6 +133,11 @@ class AudioController(private val mContext: Context) {
      */
     fun resume() {
         mPlayer.resume()
+    }
+
+
+    fun getCurrentPlay(): AudioBean? {
+        return mQueue[mIndex]
     }
 
     /**

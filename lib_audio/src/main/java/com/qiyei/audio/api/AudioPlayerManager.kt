@@ -7,8 +7,6 @@
 package com.qiyei.audio.api
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.qiyei.audio.core.AudioController
 import com.qiyei.audio.core.IAudioStatusListener
 import com.qiyei.audio.core.PlayMode
@@ -16,7 +14,7 @@ import com.qiyei.audio.favorite.FavouriteManager
 import com.qiyei.audio.model.AudioBean
 
 
-class AudioPlayerManager private constructor(val mContext: Context){
+class AudioPlayerManager private constructor(val mContext: Context) {
 
     /**
      * 注意单例写法,DCL 单例，加参数
@@ -25,15 +23,16 @@ class AudioPlayerManager private constructor(val mContext: Context){
         @Volatile
         private var instance: AudioPlayerManager? = null
 
-        lateinit var mContext:Context
+        lateinit var mContext: Context
+
         /**
          * 初始化
          */
-        fun init(context: Context){
+        fun init(context: Context) {
             mContext = context.applicationContext
             instance = AudioPlayerManager(context)
         }
-        
+
 //        fun getInstance(): AudioPlayerManager {
 //            return instance ?: synchronized(this) {
 //                instance ?: AudioPlayerManager(mContext.applicationContext).also { instance = it }
@@ -45,7 +44,7 @@ class AudioPlayerManager private constructor(val mContext: Context){
         }
     }
 
-    private val mStatusListenerMap:MutableMap<String,IAudioStatusListener> = mutableMapOf()
+    private val mStatusListenerMap: MutableMap<String, IAudioStatusListener> = mutableMapOf()
 
     /**
      * 音乐播放控制器
@@ -55,7 +54,7 @@ class AudioPlayerManager private constructor(val mContext: Context){
     /**
      * 收藏管理
      */
-    private var mFavouriteManager:FavouriteManager? = null
+    private var mFavouriteManager: FavouriteManager? = null
 
 
     init {
@@ -66,7 +65,7 @@ class AudioPlayerManager private constructor(val mContext: Context){
     /**
      * 添加到播放队列中
      */
-    fun addQueue(beans:List<AudioBean>){
+    fun addQueue(beans: List<AudioBean>) {
         mAudioController?.addQueue(beans)
     }
 
@@ -80,17 +79,26 @@ class AudioPlayerManager private constructor(val mContext: Context){
     /**
      * 删除队列中的歌曲
      */
-    fun removeQueue(index:Int) {
+    fun removeQueue(index: Int) {
         mAudioController?.removeQueue(index)
     }
 
     /**
      * 清空播放列表
      */
-    fun clearQueue(){
+    fun clearQueue() {
         mAudioController?.clearQueue()
     }
 
+    /**
+     * 获取播放队列
+     */
+    fun getQueue(): MutableList<AudioBean> {
+        mAudioController?.let {
+            return it.getQueue()
+        }
+        return mutableListOf()
+    }
 
     /**
      * 获取播放模式
@@ -102,7 +110,7 @@ class AudioPlayerManager private constructor(val mContext: Context){
     /**
      * 设置播放模式
      */
-    fun setPlayMode(mode: PlayMode){
+    fun setPlayMode(mode: PlayMode) {
         mAudioController?.setPlayMode(mode)
     }
 
@@ -126,7 +134,7 @@ class AudioPlayerManager private constructor(val mContext: Context){
     /**
      * 下一首
      */
-    fun playNext(){
+    fun playNext() {
         mAudioController?.next()
     }
 
@@ -161,25 +169,24 @@ class AudioPlayerManager private constructor(val mContext: Context){
     /**
      * 获取上一首播放
      */
-    fun getPrevPlay(): AudioBean ?{
+    fun getPrevPlay(): AudioBean? {
         return mAudioController?.getNextPlay()
     }
 
-    fun getCurrentPlay():AudioBean?{
-        return AudioBean()
+    fun getCurrentPlay(): AudioBean? {
+        return mAudioController?.getCurrentPlay()
     }
 
-
-    fun addAudioStatusListener(name:String,listener: IAudioStatusListener){
+    fun addAudioStatusListener(name: String, listener: IAudioStatusListener) {
         mStatusListenerMap[name] = listener
         mAudioController?.addAudioStatusListener(listener)
     }
 
-    fun removeAudioStatusListener(listener: IAudioStatusListener){
+    fun removeAudioStatusListener(listener: IAudioStatusListener) {
         mAudioController?.removeAudioStatusListener(listener)
     }
 
-    fun removeAudioStatusListener(name: String){
+    fun removeAudioStatusListener(name: String) {
         mStatusListenerMap[name]?.let {
             mAudioController?.removeAudioStatusListener(it)
         }
@@ -188,14 +195,14 @@ class AudioPlayerManager private constructor(val mContext: Context){
     /**
      * 添加收藏
      */
-    fun addFavourite(bean: AudioBean){
+    fun addFavourite(bean: AudioBean) {
         mFavouriteManager?.addFavourite(bean)
     }
 
     /**
      * 移除收藏
      */
-    fun removeFavourite(bean: AudioBean){
+    fun removeFavourite(bean: AudioBean) {
         mFavouriteManager?.removeFavourite(bean)
     }
 

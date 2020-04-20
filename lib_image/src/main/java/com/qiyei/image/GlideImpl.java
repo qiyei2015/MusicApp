@@ -125,8 +125,9 @@ public class GlideImpl implements IImageOperator {
                                 Drawable drawable = new BitmapDrawable(null,ImageUtils.doBlur(bitmap,100,true));
                                 return drawable;
                             }
-                        }).observeOn(Schedulers.computation())
-                        .subscribeOn(AndroidSchedulers.mainThread())
+                        })
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Consumer<Drawable>() {
                             @Override
                             public void accept(Drawable drawable) throws Exception {

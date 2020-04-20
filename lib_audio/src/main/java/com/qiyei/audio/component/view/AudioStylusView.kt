@@ -7,7 +7,6 @@
 package com.qiyei.audio.component.view
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,11 +14,13 @@ import android.widget.RelativeLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.qiyei.audio.R
 import com.qiyei.audio.api.AudioPlayerManager
+import com.qiyei.audio.component.activity.MusicPlayerActivity
 import com.qiyei.audio.component.adapter.AudioStylusPagerAdapter
 import com.qiyei.audio.core.IAudioStatusListener
 import com.qiyei.audio.core.Status
 import com.qiyei.audio.exception.AudioStatusException
 import com.qiyei.audio.model.AudioBean
+
 
 class AudioStylusView @JvmOverloads constructor(
     private val mContext: Context,
@@ -34,34 +35,27 @@ class AudioStylusView @JvmOverloads constructor(
 
     private lateinit var mViewPager:ViewPager2
     private lateinit var mQueues:MutableList<AudioBean>
+    private lateinit var mPagerAdapter:AudioStylusPagerAdapter
 
     init {
         LayoutInflater.from(mContext).inflate(R.layout.audio_view_audio_stylus,this)
         mViewPager = findViewById(R.id.audio_stylus_viewpager)
-        initData()
-    }
 
+        mQueues = mutableListOf()
+        mPagerAdapter = AudioStylusPagerAdapter(mContext, mQueues)
+        mViewPager.adapter = mPagerAdapter
+        mViewPager.currentItem = 0
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        AudioPlayerManager.getInstance().removeAudioStatusListener("AudioStylusView")
-    }
-
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-        mViewPager.adapter = AudioStylusPagerAdapter(mContext, mQueues)
-    }
-
-    private fun initData() {
         AudioPlayerManager.getInstance().addAudioStatusListener("AudioStylusView",object :
             IAudioStatusListener {
             override fun onAudioLoaded(bean: AudioBean?) {
-                Log.i(TAG,"onAudioLoaded")
+                Log.i(MusicPlayerActivity.TAG,"onAudioLoaded")
+                mPagerAdapter.notifyDataSetChanged()
             }
 
             override fun onAudioStarted(bean: AudioBean?) {
-                mViewPager.adapter?.notifyDataSetChanged()
-                Log.i(TAG,"onAudioStarted")
+                Log.i(MusicPlayerActivity.TAG,"onAudioStarted")
+                mPagerAdapter.notifyDataSetChanged()
             }
 
             override fun onAudioProgress(status: Status, progress: Int, maxLength: Int) {
@@ -73,8 +67,8 @@ class AudioStylusView @JvmOverloads constructor(
             }
 
             override fun onAudioPause(bean: AudioBean?) {
-                mViewPager.adapter?.notifyDataSetChanged()
-                Log.i(TAG,"onAudioPause")
+                Log.i(MusicPlayerActivity.TAG,"onAudioPause")
+                mPagerAdapter.notifyDataSetChanged()
             }
 
             override fun onAudioReleased(bean: AudioBean?) {
@@ -82,12 +76,19 @@ class AudioStylusView @JvmOverloads constructor(
             }
 
             override fun onError(exception: AudioStatusException) {
-                Log.i(TAG,"onError exception=$exception")
+                Log.i(MusicPlayerActivity.TAG,"onError exception=$exception")
             }
         })
-        val bean = AudioBean("听妈妈的话","七里香","","")
-        mQueues = mutableListOf()
-        mQueues.add(bean)
-        AudioPlayerManager.getInstance().addQueue(mQueues)
+    }
+
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        AudioPlayerManager.getInstance().removeAudioStatusListener("AudioStylusView")
+    }
+
+    fun setQueue(queue:MutableList<AudioBean>){
+        mQueues = queue
+        mPagerAdapter.setData(mQueues)
     }
 }

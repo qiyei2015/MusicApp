@@ -10,6 +10,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +20,9 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.qiyei.audio.R
 import com.qiyei.audio.api.AudioPlayerManager
+import com.qiyei.audio.component.activity.MusicPlayerActivity
 import com.qiyei.audio.model.AudioBean
+import com.qiyei.image.ImageManager
 
 
 class AudioStylusPagerAdapter(private val mContext: Context, var mQueues:MutableList<AudioBean>):RecyclerView.Adapter<AudioStylusPagerAdapter.AudioBeanHolder>() {
@@ -43,7 +46,8 @@ class AudioStylusPagerAdapter(private val mContext: Context, var mQueues:Mutable
 
     override fun onBindViewHolder(holder: AudioBeanHolder, position: Int) {
         val bean = mQueues[position]
-        holder.mCircleView.setImageBitmap(BitmapFactory.decodeResource(mContext.resources,R.mipmap.album_test))
+        Log.i(MusicPlayerActivity.TAG,"position=$position onBindViewHolder albumPic=${bean?.albumPic}")
+        ImageManager.getInstance().load(holder.mCircleView,bean.albumPic)
 
         if (mAnimMap[position] == null){
             val animator = ObjectAnimator.ofFloat(holder.mCircleView,View.ROTATION.name,0f,360f)
@@ -58,6 +62,11 @@ class AudioStylusPagerAdapter(private val mContext: Context, var mQueues:Mutable
             mAnimMap[position].pause()
         }
 
+    }
+
+    fun setData(queue:MutableList<AudioBean>){
+        mQueues = queue
+        notifyDataSetChanged()
     }
 
     /**

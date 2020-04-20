@@ -35,6 +35,8 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation project(':lib_image')
+    implementation project(':lib_common_ui')
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
