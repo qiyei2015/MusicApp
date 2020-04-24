@@ -1,2 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.qiyei.share" />
+    package="com.qiyei.share">
+
+    <!--读取设备标识-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!--用于缓存分享图片、log日志和设备标识，以及文件锁的使用-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!--用于分享SDK管理后台的区域分析功能展示-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <application>
+        <activity android:name="com.mob.tools.MobUIShell"></activity>
+    </application>
+
+</manifest>

@@ -2,6 +2,7 @@ package com.qiyei.music
 
 import android.app.Application
 import com.qiyei.audio.api.AudioPlayerManager
+import com.qiyei.share.ShareManager
 
 /**
  * @author Created by qiyei2015 on 2020/3/27.
@@ -20,6 +21,7 @@ class MusicApplication:Application() {
         instance = this
 
         AudioPlayerManager.init(this)
+        ShareManager.init(this)
     }
 
 }

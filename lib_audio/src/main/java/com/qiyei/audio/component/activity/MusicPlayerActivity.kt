@@ -14,6 +14,7 @@ import com.qiyei.audio.model.AudioBean
 import com.qiyei.audio.model.MockData
 import com.qiyei.common.ui.activity.BaseActivity
 import com.qiyei.image.ImageManager
+import com.qiyei.share.ShareManager
 import kotlinx.android.synthetic.main.audio_activity_music_player.*
 
 class MusicPlayerActivity : BaseActivity(){
@@ -48,11 +49,12 @@ class MusicPlayerActivity : BaseActivity(){
             R.id.play_btn_imv -> toggleMusicPlay()
             R.id.next_btn_play -> playNext()
             R.id.show_more_music -> showMusicList()
+            R.id.share_btn_imv -> showShare()
         }
     }
 
 
-     override fun initData() {
+    override fun initData() {
         isPlay = false
         AudioPlayerManager.getInstance().addQueue(MockData.queues)
 
@@ -98,6 +100,7 @@ class MusicPlayerActivity : BaseActivity(){
         play_btn_imv.setOnClickListener(this)
         next_btn_play.setOnClickListener(this)
         show_more_music.setOnClickListener(this)
+        share_btn_imv.setOnClickListener(this)
 
         AudioPlayerManager.getInstance().play()
 
@@ -161,5 +164,9 @@ class MusicPlayerActivity : BaseActivity(){
     private fun showMusicList(){
         val dialog = AudioListDialog(MusicPlayerActivity@this)
         dialog.show()
+    }
+
+    private fun showShare() {
+        ShareManager.showShare(this)
     }
 }

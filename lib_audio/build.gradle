@@ -37,6 +37,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation project(':lib_image')
     implementation project(':lib_common_ui')
+    implementation project(':lib_share')
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
