@@ -92,7 +92,7 @@ class AudioPlayer(private val mContext: Context) : MediaPlayer.OnCompletionListe
     }
 
     override fun onBufferingUpdate(mp: MediaPlayer?, percent: Int) {
-
+        Log.i(TAG, "onBufferingUpdate,percent=$percent")
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
