@@ -6,6 +6,6 @@
  */
 package com.qiyei.video.core;
 
-public enum Status {
+public enum State {
     IDLE, PLAYING, PAUSED, ERROR
 }
