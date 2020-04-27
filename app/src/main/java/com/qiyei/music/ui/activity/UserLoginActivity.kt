@@ -6,6 +6,7 @@
  */
 package com.qiyei.music.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.qiyei.common.ui.activity.BaseActivity
@@ -16,6 +17,7 @@ import com.qiyei.music.common.Env
 import com.qiyei.network.api.HttpManager
 import com.qiyei.network.api.HttpRequest
 import com.qiyei.network.api.IHttpListener
+import com.qiyei.video.component.activity.VideoPlayerDemoActivity
 import kotlinx.android.synthetic.main.activity_user_login.*
 import java.lang.Exception
 
@@ -30,15 +32,17 @@ class UserLoginActivity : BaseActivity() {
         setContentView(R.layout.activity_user_login)
 
         user_login_tv.setOnClickListener {
-            HttpManager().execute(supportFragmentManager,buildUserLoginRequest(),object:IHttpListener<Any>{
-                override fun onSuccess(response: Any?) {
-                    Log.i(TAG,"onSuccess $response")
-                }
+//            HttpManager().execute(supportFragmentManager,buildUserLoginRequest(),object:IHttpListener<Any>{
+//                override fun onSuccess(response: Any?) {
+//                    Log.i(TAG,"onSuccess $response")
+//                }
+//
+//                override fun onFailure(exception: Exception?) {
+//                    Log.i(TAG,"onFailure $exception")
+//                }
+//            })
 
-                override fun onFailure(exception: Exception?) {
-                    Log.i(TAG,"onFailure $exception")
-                }
-            })
+            startActivity(Intent(UserLoginActivity@this,VideoPlayerDemoActivity::class.java))
         }
     }
 

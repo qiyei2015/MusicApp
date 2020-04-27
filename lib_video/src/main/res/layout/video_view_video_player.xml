@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/icon_video_player_full"
+        android:background="@drawable/anim_video_player_loading"
         android:id="@+id/video_player_loading_bar"
         android:visibility="visible">
     </ImageView>

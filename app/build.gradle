@@ -62,6 +62,7 @@ dependencies {
     implementation project(':lib_image')
     implementation project(':lib_audio')
     implementation project(':lib_share')
+    implementation project(':lib_video')
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

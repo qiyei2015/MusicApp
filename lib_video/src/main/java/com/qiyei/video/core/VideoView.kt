@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.SurfaceTexture
+import android.graphics.drawable.AnimationDrawable
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.util.AttributeSet
@@ -34,6 +35,7 @@ class VideoView @JvmOverloads constructor(
     companion object {
         const val TAG = "VideoView"
         const val ASPECT_RATIO: Float = 9.0f / 16f
+        const val RetryCount = 3
     }
 
     /**
@@ -49,7 +51,7 @@ class VideoView @JvmOverloads constructor(
     /**
      * 是否静音
      */
-    private var isMute:Boolean = true
+    private var isMute:Boolean = false
     /**
      * 播放器状态
      */
@@ -83,6 +85,17 @@ class VideoView @JvmOverloads constructor(
      */
     private var mHeight: Int = 0
 
+    /**
+     * 重试次数
+     */
+    private var mCount:Int = 0
+
+    private var mCanPlay:Boolean = false
+
+    var isRealPause:Boolean = false
+
+    var isComplete:Boolean = false
+
     init {
         initView(context)
         initData()
@@ -99,8 +112,6 @@ class VideoView @JvmOverloads constructor(
 
         full_play_imv.setOnClickListener(this)
         video_player_play_btn.setOnClickListener(this)
-
-        initPlayer()
     }
 
     private fun registerScreenReceiver(context: Context) {
@@ -142,11 +153,21 @@ class VideoView @JvmOverloads constructor(
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
+        Log.i(TAG,"onPrepared")
+        showPlayView()
+        mMediaPlayer = mp
+        mMediaPlayer?.let {
+            mCount = 0
+            setState(State.PAUSED)
+            resume()
+        }
         mPlayerListener?.onPrepared()
     }
 
     override fun onBufferingUpdate(mp: MediaPlayer?, percent: Int) {
         mPlayerListener?.onBufferingUpdate(percent)
+        Log.i(TAG,"onBufferingUpdate state=$mState")
+        showPlayView()
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
@@ -172,16 +193,20 @@ class VideoView @JvmOverloads constructor(
     }
 
     override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
+        Log.i(TAG,"onSurfaceTextureAvailable state=$mState")
         mSurfaceTexture = surface
         initPlayer()
         mMediaPlayer?.setSurface(Surface(mSurfaceTexture))
+
+        //触发load加载视频播放
         load()
     }
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
+        Log.i(TAG,"onVisibilityChanged")
         if (visibility == View.VISIBLE && mState == State.PAUSED){
-            if (isRealPause() || isComplete()){
+            if (isRealPause || isComplete){
                 pause()
             } else {
                 resume()
@@ -191,10 +216,19 @@ class VideoView @JvmOverloads constructor(
         }
     }
 
+    fun setUrl(url:String){
+        mUrl = url
+    }
+
+    fun getUrl():String {
+        return mUrl
+    }
+
     /**
      * 加载后播放
      */
     fun load(){
+        Log.i(TAG,"load,state=$mState")
         if (mState != State.IDLE){
             Log.i(TAG,"load error state = ${mState}")
             return
@@ -203,39 +237,69 @@ class VideoView @JvmOverloads constructor(
         setState(State.IDLE)
         try {
             initPlayer()
-            mute(true)
+            mute(isMute)
             mMediaPlayer?.setDataSource(mUrl)
             mMediaPlayer?.prepareAsync()
         } catch (e: Exception) {
+            Log.i(TAG,"load Exception = ${e.message}")
             //重试后退出
             stop()
         }
     }
 
-    
     fun start(){
 
     }
 
     fun stop(){
-
+        mMediaPlayer?.let {
+            it.reset()
+            it.setOnSeekCompleteListener(null)
+            it.stop()
+            it.release()
+        }
+        setState(State.IDLE)
+        if (mCount < RetryCount) {
+            mCount++
+            load()
+        } else {
+            showPauseView(false)
+        }
     }
 
     fun pause(){
-
+        Log.i(TAG,"pause,state=$mState")
+        if (mState != State.PLAYING) {
+            Log.e(TAG,"pause error,state=$mState")
+            return
+        }
+        setState(State.PAUSED)
+        if (isPlaying()){
+            mMediaPlayer?.pause()
+            if (!mCanPlay){
+                mMediaPlayer?.seekTo(0)
+            }
+        }
+        showPauseView(false)
     }
 
     fun resume(){
-
+        Log.i(TAG,"resume,state=$mState")
+        if (mState != State.PAUSED){
+            Log.e(TAG,"resume error,state=$mState")
+            return
+        }
+        if (!isPlaying()){
+            entryResumeState()
+            mMediaPlayer?.setOnSeekCompleteListener(null)
+            mMediaPlayer?.start()
+            Log.i(TAG,"resume,state=$mState,isPlay=${isPlaying()}")
+            showPauseView(true)
+        } else {
+            showPauseView(false)
+        }
     }
 
-    fun isRealPause():Boolean {
-        return true
-    }
-
-    fun isComplete():Boolean {
-        return true
-    }
 
     /**
      * 设置播放状态
@@ -249,7 +313,11 @@ class VideoView @JvmOverloads constructor(
      */
     fun mute(mute: Boolean){
         isMute = mute
-        mMediaPlayer?.setVolume(0f,0f)
+        if (isMute) {
+            mMediaPlayer?.setVolume(0f,0f)
+        } else {
+            mMediaPlayer?.setVolume(1f,1f)
+        }
     }
 
     fun isPlaying():Boolean {
@@ -283,19 +351,47 @@ class VideoView @JvmOverloads constructor(
         context.unregisterReceiver(mScreenReceiver)
     }
 
+    @Synchronized
     private fun initPlayer() {
-        mMediaPlayer = MediaPlayer()
-        val audioAttributes =
-            AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MOVIE).build()
-        mMediaPlayer?.setAudioAttributes(audioAttributes)
-        mMediaPlayer?.setOnPreparedListener(this)
-        mMediaPlayer?.setOnBufferingUpdateListener(this)
-        mMediaPlayer?.setOnCompletionListener(this)
-        mMediaPlayer?.setOnErrorListener(this)
+        if (mMediaPlayer == null) {
+            mMediaPlayer = MediaPlayer()
+            val audioAttributes =
+                AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MOVIE).build()
+            mMediaPlayer?.setAudioAttributes(audioAttributes)
+            mMediaPlayer?.setOnPreparedListener(this)
+            mMediaPlayer?.setOnBufferingUpdateListener(this)
+            mMediaPlayer?.setOnCompletionListener(this)
+            mMediaPlayer?.setOnErrorListener(this)
+        }
     }
 
     private fun showLoadingView() {
+        full_play_imv.visibility = View.GONE
+        video_player_play_btn.visibility = View.GONE
+        video_player_loading_bar.visibility = View.VISIBLE
+        val anim = video_player_loading_bar.background as AnimationDrawable
+        anim.start()
+    }
 
+    private fun showPauseView(show:Boolean){
+        full_play_imv.visibility = if (show) View.VISIBLE else View.GONE
+        video_player_play_btn.visibility = if (show) View.VISIBLE else View.GONE
+        video_player_loading_bar.clearAnimation()
+        video_player_loading_bar.visibility = View.GONE
+    }
+
+    private fun showPlayView(){
+        video_player_loading_bar.clearAnimation()
+        video_player_loading_bar.visibility = View.GONE
+        full_play_imv.visibility = View.GONE
+        video_player_play_btn.visibility = View.GONE
+    }
+
+    private fun entryResumeState() {
+        mCanPlay = true
+        setState(State.PLAYING)
+        isRealPause = false
+        isComplete = false
     }
 
     private class ScreenEventReceiver : BroadcastReceiver() {
