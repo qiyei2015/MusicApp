@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/black">
-
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icon_video_player_full"
-        android:scaleType="center"
-        android:layout_alignParentRight="true"
-        android:id="@+id/full_play_imv">
-    </ImageView>
 
     <TextureView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:id="@+id/video_textureView">
     </TextureView>
+
+    <ImageView
+        android:layout_width="@dimen/dp_25"
+        android:layout_height="@dimen/dp_25"
+        android:layout_gravity="end|top"
+        android:layout_margin="@dimen/dp_10"
+        android:padding="@dimen/dp_10"
+        android:src="@drawable/icon_video_player_full"
+        android:scaleType="center"
+        android:id="@+id/play_window_toggle_imv">
+    </ImageView>
 
     <Button
         android:layout_width="@dimen/dp_80"
         android:layout_height="@dimen/dp_80"
-        android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:background="@drawable/icon_video_player_play"
         android:id="@+id/video_player_play_btn"
         android:visibility="visible">
@@ -33,10 +34,43 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:background="@drawable/anim_video_player_loading"
         android:id="@+id/video_player_loading_bar"
         android:visibility="visible">
     </ImageView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/dp_2"
+        android:gravity="center_vertical">
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/dp_5"
+            android:layout_marginHorizontal="@dimen/dp_10"
+            android:textColor="@android:color/white"
+            android:text="0:00"
+            android:id="@+id/video_start_time_tv">
+        </TextView>
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/video_seek_bar">
+        </androidx.appcompat.widget.AppCompatSeekBar>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/dp_5"
+            android:layout_marginHorizontal="@dimen/dp_10"
+            android:textColor="@android:color/white"
+            android:text="5:00"
+            android:id="@+id/video_full_time_tv">
+        </TextView>
+    </LinearLayout>
+
+</FrameLayout>

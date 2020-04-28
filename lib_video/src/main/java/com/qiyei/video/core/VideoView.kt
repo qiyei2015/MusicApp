@@ -14,11 +14,14 @@ import android.graphics.SurfaceTexture
 import android.graphics.drawable.AnimationDrawable
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
-import android.widget.RelativeLayout
+import android.widget.FrameLayout
 import com.qiyei.video.R
 import com.qiyei.video.api.VideoPlayerListener
 import kotlinx.android.synthetic.main.video_view_video_player.view.*
@@ -27,7 +30,7 @@ class VideoView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr), View.OnClickListener,
+) : FrameLayout(context, attrs, defStyleAttr), View.OnClickListener,
     MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener,
     MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener,
     TextureView.SurfaceTextureListener {
@@ -36,6 +39,9 @@ class VideoView @JvmOverloads constructor(
         const val TAG = "VideoView"
         const val ASPECT_RATIO: Float = 9.0f / 16f
         const val RetryCount = 3
+
+        private const val TIME_MSG = 0x1
+        private const val TIME_INTERVAL = 100
     }
 
     /**
@@ -96,6 +102,28 @@ class VideoView @JvmOverloads constructor(
 
     var isComplete:Boolean = false
 
+    var isMiniWindow:Boolean = true
+
+
+    private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                TIME_MSG -> {
+                    if (getState() == State.PLAYING
+                        || getState() == State.PAUSED
+                    ) {
+//                        mPlayerListener.forEach {
+//                            it.onAudioProgress(getStatus(), getCurrentProgress(), getDuration())
+//                        }
+                        video_seek_bar.progress = getCurrentProgress()
+                        sendEmptyMessageDelayed(TIME_MSG, TIME_INTERVAL.toLong())
+                    }
+                }
+            }
+        }
+    }
+
+
     init {
         initView(context)
         initData()
@@ -110,7 +138,7 @@ class VideoView @JvmOverloads constructor(
         mTextureView.keepScreenOn = true
         mTextureView.setOnClickListener(this)
 
-        full_play_imv.setOnClickListener(this)
+        play_window_toggle_imv.setOnClickListener(this)
         video_player_play_btn.setOnClickListener(this)
     }
 
@@ -132,22 +160,28 @@ class VideoView @JvmOverloads constructor(
     }
 
     private fun initSmallLayout() {
-        val params = LayoutParams(mWidth,mHeight)
-        params.addRule(RelativeLayout.CENTER_IN_PARENT)
+        val params = FrameLayout.LayoutParams(mWidth,mHeight)
+        params.gravity = Gravity.CENTER
         mTextureView.layoutParams = params
 
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.full_play_imv -> {
-
+            R.id.play_window_toggle_imv -> {
+                isMiniWindow = !isMiniWindow
+                play_window_toggle_imv.setImageResource(if (isMiniWindow) R.drawable.icon_video_player_mini else R.drawable.icon_video_player_full)
             }
             R.id.video_player_play_btn -> {
-
+                Log.i(TAG,"onClick video_player_play_btn mState=$mState")
+                if (mState == State.PAUSED){
+                    resume()
+                }
             }
             R.id.video_textureView -> {
-
+                if (mState == State.PLAYING) {
+                    pause()
+                }
             }
         }
     }
@@ -167,10 +201,12 @@ class VideoView @JvmOverloads constructor(
     override fun onBufferingUpdate(mp: MediaPlayer?, percent: Int) {
         mPlayerListener?.onBufferingUpdate(percent)
         Log.i(TAG,"onBufferingUpdate state=$mState")
-        showPlayView()
+        showPauseView()
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
+        Log.i(TAG,"onCompletion state=$mState")
+        gotoPlayBack()
         mPlayerListener?.onCompletion()
     }
 
@@ -247,10 +283,6 @@ class VideoView @JvmOverloads constructor(
         }
     }
 
-    fun start(){
-
-    }
-
     fun stop(){
         mMediaPlayer?.let {
             it.reset()
@@ -263,7 +295,7 @@ class VideoView @JvmOverloads constructor(
             mCount++
             load()
         } else {
-            showPauseView(false)
+            showPauseView()
         }
     }
 
@@ -280,7 +312,7 @@ class VideoView @JvmOverloads constructor(
                 mMediaPlayer?.seekTo(0)
             }
         }
-        showPauseView(false)
+        showPauseView()
     }
 
     fun resume(){
@@ -293,11 +325,10 @@ class VideoView @JvmOverloads constructor(
             entryResumeState()
             mMediaPlayer?.setOnSeekCompleteListener(null)
             mMediaPlayer?.start()
+            mHandler.sendEmptyMessage(TIME_MSG)
             Log.i(TAG,"resume,state=$mState,isPlay=${isPlaying()}")
-            showPauseView(true)
-        } else {
-            showPauseView(false)
         }
+        showPlayView()
     }
 
 
@@ -306,6 +337,13 @@ class VideoView @JvmOverloads constructor(
      */
     fun setState(state: State){
         mState = state
+    }
+
+    /**
+     * 获取状态
+     */
+    fun getState():State {
+        return mState
     }
 
     /**
@@ -328,13 +366,25 @@ class VideoView @JvmOverloads constructor(
     }
 
     /**
-     * 获取播放进度
+     * 获取当前播放进度
      */
-    fun getCurrentPosition():Int{
-        mMediaPlayer?.let {
-            return it.currentPosition
+    fun getCurrentProgress(): Int {
+        if (mState == State.PAUSED || mState == State.PLAYING) {
+            mMediaPlayer?.let {
+                return it.currentPosition
+            }
         }
-        return 0
+        return  -1
+    }
+
+    /**
+     * 播放总时长
+     */
+    fun getTotalDuration(): Int {
+        if (mState == State.PAUSED || mState == State.PLAYING) {
+            return mMediaPlayer?.duration!!
+        }
+        return -1
     }
 
     /**
@@ -366,16 +416,16 @@ class VideoView @JvmOverloads constructor(
     }
 
     private fun showLoadingView() {
-        full_play_imv.visibility = View.GONE
+        play_window_toggle_imv.visibility = View.GONE
         video_player_play_btn.visibility = View.GONE
         video_player_loading_bar.visibility = View.VISIBLE
         val anim = video_player_loading_bar.background as AnimationDrawable
         anim.start()
     }
 
-    private fun showPauseView(show:Boolean){
-        full_play_imv.visibility = if (show) View.VISIBLE else View.GONE
-        video_player_play_btn.visibility = if (show) View.VISIBLE else View.GONE
+    private fun showPauseView(){
+        play_window_toggle_imv.visibility = View.VISIBLE
+        video_player_play_btn.visibility = View.VISIBLE
         video_player_loading_bar.clearAnimation()
         video_player_loading_bar.visibility = View.GONE
     }
@@ -383,8 +433,9 @@ class VideoView @JvmOverloads constructor(
     private fun showPlayView(){
         video_player_loading_bar.clearAnimation()
         video_player_loading_bar.visibility = View.GONE
-        full_play_imv.visibility = View.GONE
+        play_window_toggle_imv.visibility = View.GONE
         video_player_play_btn.visibility = View.GONE
+        video_seek_bar.max = getTotalDuration()
     }
 
     private fun entryResumeState() {
@@ -392,6 +443,16 @@ class VideoView @JvmOverloads constructor(
         setState(State.PLAYING)
         isRealPause = false
         isComplete = false
+    }
+
+    private fun gotoPlayBack() {
+        mMediaPlayer?.let {
+            it.setOnSeekCompleteListener(null)
+            it.seekTo(0)
+            it.pause()
+        }
+        setState(State.PAUSED)
+        showPauseView()
     }
 
     private class ScreenEventReceiver : BroadcastReceiver() {
