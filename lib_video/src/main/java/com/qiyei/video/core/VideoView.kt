@@ -22,8 +22,10 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
+import android.widget.SeekBar
 import com.qiyei.video.R
 import com.qiyei.video.api.VideoPlayerListener
+import com.qiyei.video.utils.VideoUtils
 import kotlinx.android.synthetic.main.video_view_video_player.view.*
 
 class VideoView @JvmOverloads constructor(
@@ -40,8 +42,10 @@ class VideoView @JvmOverloads constructor(
         const val ASPECT_RATIO: Float = 9.0f / 16f
         const val RetryCount = 3
 
-        private const val TIME_MSG = 0x1
+        private const val MSG_UPDATE_TIME = 0x01
+        private const val MSG_UPDATE_SEEK_BAR = 0x02
         private const val TIME_INTERVAL = 100
+        private const val TIME_DELAY_3_SEC = 3000L
     }
 
     /**
@@ -108,16 +112,17 @@ class VideoView @JvmOverloads constructor(
     private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
-                TIME_MSG -> {
+                MSG_UPDATE_TIME -> {
                     if (getState() == State.PLAYING
                         || getState() == State.PAUSED
                     ) {
-//                        mPlayerListener.forEach {
-//                            it.onAudioProgress(getStatus(), getCurrentProgress(), getDuration())
-//                        }
                         video_seek_bar.progress = getCurrentProgress()
-                        sendEmptyMessageDelayed(TIME_MSG, TIME_INTERVAL.toLong())
+                        video_start_time_tv.text = VideoUtils.formatDurationTime(getCurrentProgress())
+                        sendEmptyMessageDelayed(MSG_UPDATE_TIME, TIME_INTERVAL.toLong())
                     }
+                }
+                MSG_UPDATE_SEEK_BAR -> {
+                    video_seek_bar_layout.visibility = View.GONE
                 }
             }
         }
@@ -137,9 +142,26 @@ class VideoView @JvmOverloads constructor(
         mTextureView.surfaceTextureListener = this
         mTextureView.keepScreenOn = true
         mTextureView.setOnClickListener(this)
+        video_start_time_tv.text = VideoUtils.formatDurationTime(0)
+        video_full_time_tv.text = VideoUtils.formatDurationTime(0)
 
         play_window_toggle_imv.setOnClickListener(this)
         video_player_play_btn.setOnClickListener(this)
+        video_seek_bar.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                Log.i(TAG,"onProgressChanged progress=$progress")
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                seekBar?.let {
+                    mMediaPlayer?.seekTo(seekBar?.progress)
+                }
+            }
+        })
     }
 
     private fun registerScreenReceiver(context: Context) {
@@ -195,13 +217,14 @@ class VideoView @JvmOverloads constructor(
             setState(State.PAUSED)
             resume()
         }
+
         mPlayerListener?.onPrepared()
     }
 
     override fun onBufferingUpdate(mp: MediaPlayer?, percent: Int) {
         mPlayerListener?.onBufferingUpdate(percent)
         Log.i(TAG,"onBufferingUpdate state=$mState")
-        showPauseView()
+
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
@@ -325,7 +348,7 @@ class VideoView @JvmOverloads constructor(
             entryResumeState()
             mMediaPlayer?.setOnSeekCompleteListener(null)
             mMediaPlayer?.start()
-            mHandler.sendEmptyMessage(TIME_MSG)
+            mHandler.sendEmptyMessage(MSG_UPDATE_TIME)
             Log.i(TAG,"resume,state=$mState,isPlay=${isPlaying()}")
         }
         showPlayView()
@@ -428,6 +451,7 @@ class VideoView @JvmOverloads constructor(
         video_player_play_btn.visibility = View.VISIBLE
         video_player_loading_bar.clearAnimation()
         video_player_loading_bar.visibility = View.GONE
+        video_seek_bar_layout.visibility = View.VISIBLE
     }
 
     private fun showPlayView(){
@@ -435,7 +459,11 @@ class VideoView @JvmOverloads constructor(
         video_player_loading_bar.visibility = View.GONE
         play_window_toggle_imv.visibility = View.GONE
         video_player_play_btn.visibility = View.GONE
+
+        video_seek_bar_layout.visibility = View.VISIBLE
         video_seek_bar.max = getTotalDuration()
+        video_full_time_tv.text = VideoUtils.formatDurationTime(getTotalDuration())
+        mHandler.sendEmptyMessageDelayed(MSG_UPDATE_SEEK_BAR, TIME_DELAY_3_SEC)
     }
 
     private fun entryResumeState() {
@@ -451,6 +479,7 @@ class VideoView @JvmOverloads constructor(
             it.seekTo(0)
             it.pause()
         }
+        isComplete = true
         setState(State.PAUSED)
         showPauseView()
     }
