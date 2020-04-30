@@ -73,6 +73,7 @@ class VideoPlayer(private val mContext: Context) : MediaPlayer.OnPreparedListene
 
     var isComplete: Boolean = false
 
+    private var mFullDialog:VideoViewFullDialog? = null
 
     private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
@@ -155,6 +156,32 @@ class VideoPlayer(private val mContext: Context) : MediaPlayer.OnPreparedListene
 
     fun seekTo(msec: Int) {
         mMediaPlayer?.seekTo(msec)
+    }
+
+    /**
+     * 开启全屏Dialog播放
+     */
+    fun showFullDialogPlay(){
+        //暂停当前view
+        //记录播放进度
+        //启动dialog并进行播放
+        //动画切换效果
+        if (mFullDialog == null){
+            mFullDialog = VideoViewFullDialog(mContext)
+            mFullDialog?.setVideoPlayer(this)
+        }
+        mFullDialog?.show()
+    }
+
+    /**
+     * 重置Dialog
+     */
+    fun closeFullDialogPlay(){
+        //暂停dialog view
+        //记录播放进度
+        //关闭dialog并进行当前view播放
+        //动画切换效果
+        mFullDialog?.dismiss()
     }
 
     /**

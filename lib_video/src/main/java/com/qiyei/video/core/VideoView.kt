@@ -133,6 +133,11 @@ class VideoView @JvmOverloads constructor(
             R.id.play_window_toggle_imv -> {
                 isMiniWindow = !isMiniWindow
                 play_window_toggle_imv.setImageResource(if (isMiniWindow) R.drawable.icon_video_player_mini else R.drawable.icon_video_player_full)
+                if (isMiniWindow){
+                    mVideoPlayer.showFullDialogPlay()
+                } else {
+                    mVideoPlayer.closeFullDialogPlay()
+                }
             }
             R.id.video_player_play_btn -> {
                 mVideoPlayer.start()
