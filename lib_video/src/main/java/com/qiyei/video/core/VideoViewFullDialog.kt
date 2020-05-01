@@ -33,6 +33,7 @@ class VideoViewFullDialog(
         //全透明，要不然有padding
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
+        window?.setWindowAnimations(R.style.VideoFullDialog)
 
         mVideoView = findViewById(R.id.video_view_full)!!
         mViewPlayer.attachVideoView(mVideoView)

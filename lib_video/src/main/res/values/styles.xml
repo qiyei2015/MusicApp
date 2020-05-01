@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="VideoFullDialog" parent="@android:style/Animation.Dialog">
+        <!-- Customize your theme here. -->
+        <item name="android:windowEnterAnimation">@anim/video_anim_full_dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/video_anim_full_dialog_exit</item>
+    </style>
+
+</resources>
